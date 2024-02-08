@@ -1,5 +1,5 @@
 def check_temp(min_value):
-    error = "Please enter a number that is more -" \
+    error = "Please enter a number that is more " \
             "than {}".format(min_value)
 
     try:

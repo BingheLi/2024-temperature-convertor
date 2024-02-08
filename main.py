@@ -46,8 +46,7 @@ class Convertor:
                                         text="To Degrees C",
                                         bg="#990099",
                                         fg=button_fg,
-                                        font=button_font, width=12,
-                                        command=self.to_celsius)
+                                        font=button_font, width=12)
         self.to_celsius_button.grid(row=0, column=0, padx=5, pady=5)
 
         self.to_farenheit_button = Button(self.button_frame,
@@ -71,27 +70,6 @@ class Convertor:
                                         font=button_font, width=12,
                                         state=DISABLED)
         self.to_history_button.grid(row=1, column=1, padx=5, pady=5)
-
-    def check_temp(self, min_value):
-        error = "Please enter a number that is more " \
-                "than {}".format(min_value)
-
-        try:
-            response = self.temp_entry.get()
-            response = float(response)
-
-            if response < min_value:
-                self.temp_error.config(text=error)
-            else:
-                return response
-
-        except ValueError:
-            self.temp_error.config(text=error)
-
-    # check temperature is more than -273 and convert it
-    def to_celsius(self):
-
-        self.check_temp(-273)
 
 
 # main routine
