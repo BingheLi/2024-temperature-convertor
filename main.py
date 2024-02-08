@@ -10,7 +10,7 @@ class Convertor:
         button_fg = "#FFFFFF"
 
         # set up the GUI frame
-        self.temp_frame = Frame()
+        self.temp_frame = Frame(padx=10, pady=10)
         self.temp_frame.grid()
 
         self.temp_heading = Label(self.temp_frame,

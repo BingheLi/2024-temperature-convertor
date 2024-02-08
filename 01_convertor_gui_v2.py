@@ -4,6 +4,14 @@ from tkinter import *
 class Convertor:
 
     def __init__(self):
+
+        # initialise variables ( such as the feedback variable)
+        self.var_feedback = StringVar()
+        self.var_feedback.set("")
+
+        self.var_has_error = StringVar()
+        self.var_has_error.set("no")
+
         # common format for all buttons
         # Arial size 14 bold, with white text
         button_font = ("Arial", "12", "bold")
@@ -73,6 +81,8 @@ class Convertor:
         self.to_history_button.grid(row=1, column=1, padx=5, pady=5)
 
     def check_temp(self, min_value):
+
+        has_error = "no"
         error = "Please enter a number that is more " \
                 "than {}".format(min_value)
 
@@ -81,12 +91,29 @@ class Convertor:
             response = float(response)
 
             if response < min_value:
-                self.temp_error.config(text=error)
+                has_error = "yes"
             else:
                 return response
 
         except ValueError:
-            self.temp_error.config(text=error)
+            has_error = "yes"
+
+        # if the number is invalid, display error message
+        if has_error == "yes":
+            self.temp_error.config(text=error, fg="#9C0000")
+        else:
+            self.temp_error.config(text="Your are OK", fg="blue")
+
+            #if we have at least one valid calculation,
+            # enable history / export button
+            self.to_history_button.config(state=NORMAL)
+
+       # sets var_has error so that entry box and
+       # labels can be correctly formatted by formatting function
+       if has_error == "yes":
+           self.var_has_error.set("yes")
+           self.var_feedback.set(error)
+           return "invalid"
 
     # check temperature is more than -273 and convert it
     def to_celsius(self):
