@@ -18,72 +18,52 @@ class Converter:
         self.button_frame.grid(row=0)
 
         self.to_history_button = Button(self.button_frame,
-                                     text="History / Export",
-                                     bg="#CC6600",
-                                     fg=button_fg,
-                                     font=button_font, width=12,
-                                     command=self.to_history)
-        self.to_history_button.grid(row=1, column=0, padx=5, pady=5)
+                                        text="History / Export",
+                                        bg="#004C99",
+                                        fg=button_fg,
+                                        font=button_font, width=12,
+                                        state=DISABLED,
+                                        command=self.to_history)
+        self.to_history_button.grid(row=1, column=1, padx=5, pady=5)
+
+        # **** Remove when integrating!! ***
+        self.to_history_button.config(state=NORMAL)
 
     def to_history(self):
-        Displayhistory(self)
+        HistoryExport(self)
 
 
-class Displayhistory:
+class HistoryExport:
 
     def __init__(self, partner):
-
         # setup dialogue box and background colour
-        background = "#ffe6cc"
         self.history_box = Toplevel()
 
-        # disable history button
+        # disable help button
         partner.to_history_button.config(state=DISABLED)
 
-        # If users press cross at top, closes history and
-        # 'releases' history button
+        # If users press cross at top, closes help and
+        # 'releases' help button
         self.history_box.protocol('WM_DELETE_WINDOW',
-                               partial(self.close_history,partner))
+                                  partial(self.close_history,
+                                          partner))
 
         self.history_frame = Frame(self.history_box, width=300,
-                                height=200,
-                                bg=background)
+                                   height=200
+                                   )
         self.history_frame.grid()
-
-        self.history_heading_label = Label(self.history_frame,
-                                        bg=background,
-                                        text="History / Export",
-                                        font=("Arial", "14", "bold"))
-        self.history_heading_label.grid(row=0)
-
-        history_text = "To use the program, simply enter the temperature " \
-                    "you wish to convert and then choose to convert " \
-                    "to either degrees Celsius (centigrade) or " \
-                    "Fahrenheit..  \n\n" \
-                    " Note that -273 degrees C " \
-                    "(-459 F) is absolute zero (the coldest possible " \
-                    "temperature).  If you try to convert a " \
-                    "temperature that is less than -273 degrees C, " \
-                    "you will get an error message. \n\n " \
-                    "To see your " \
-                    "calculation history and export it to a text " \
-                    "file, please click the 'History / Export' button."
-        self.history_text_label = Label(self.history_frame, bg=background,
-                                     text=history_text, wrap=350,
-                                     justify="left")
-        self.history_text_label.grid(row=1, padx=10)
 
         self.dismiss_button = Button(self.history_frame,
                                      font=("Arial", "12", "bold"),
-                                     text="Dismiss", bg="#CC6600",
+                                     text="Dismiss", bg="#666666",
                                      fg="#FFFFFF",
                                      command=partial(self.close_history,
                                                      partner))
         self.dismiss_button.grid(row=2, padx=10, pady=10)
 
-    # closes history dialogue (used by button and x at top of dialogue)
+    # closes help dialogue (used by button and x at top of dialogue)
     def close_history(self, partner):
-        # Put history button back to normal...
+        # Put help button back to normal...
         partner.to_history_button.config(state=NORMAL)
         self.history_box.destroy()
 
