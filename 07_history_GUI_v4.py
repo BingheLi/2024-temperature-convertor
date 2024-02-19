@@ -13,14 +13,7 @@ class Converter:
         button_fg = "#FFFFFF"
 
         # Five item list
-        self.all_calculations = ['0 F° is -18 C°', '0 C° is 32 F°',
-                                 '30 F° is -1 C°', '30 C° is 86 F°',
-                                 '40 F° is 4 C°']
-
-        # # Six item list
-        self.all_calculations = ['0 F° is -18 C°', '0 C° is 32 F°',
-                                 '30 F° is -1 C°', '30 C° is 86 F°',
-                                 '40 F° is 4 C°', '100 C° is 212 F°']
+        self.all_calculations = ['0 F° is -18 C°']
 
         # Set up GUI Frame
         self.temp_frame = Frame(padx=10, pady=10)
@@ -142,10 +135,8 @@ class HistoryExport:
 
         self.filename_feedback_label = Label(self.history_frame,
                                              text="",
-                                             fg="#9C0000",
-                                             wraplength=300,
-                                             font=("Arial", "12",
-                                                   "bold"))
+                                             fg="#9C0000", wraplength=300,
+                                             font=("Arial", "12", "bold"))
         self.filename_feedback_label.grid(row=5)
 
         self.button_frame = Frame(self.history_frame)
@@ -194,15 +185,12 @@ class HistoryExport:
 
         # iterate to all but last item,
         # adding item and line break to calculation string
-        for item in range(0, stop - 1):
+        for item in range(0, stop):
             calc_string += var_calculations[len(var_calculations)
                                             - item - 1]
             calc_string += "\n"
 
-        # add final item without an extra linebreak
-        # ie: last item on list will be fifth from the end!
-        calc_string += var_calculations[-max_calcs]
-
+        calc_string = calc_string.strip()
         return calc_string
 
     def make_file(self):
@@ -214,7 +202,6 @@ class HistoryExport:
 
         if filename == "":
             # get date and create default filename
-            date_part = self.get_date()
             filename = "{}_temperature_calculations".format(date_part)
 
         else:
@@ -223,14 +210,14 @@ class HistoryExport:
 
         if filename_ok == "":
             filename += ".txt"
-            success = "Success! Your calculation history has " \
-                      "been saved as {}".format(filename)
+            success = "Your calculations have  " \
+                      "been saved (filename: {})".format(filename)
             self.var_filename.set(filename)
             self.filename_feedback_label.config(text=success,
                                                 fg="dark green")
             self.filename_entry.config(bg="#FFFFFF")
 
-            # writing content to file!
+            # Write content to file!
             self.write_to_file()
 
         else:
@@ -278,7 +265,34 @@ class HistoryExport:
 
         return problem
 
-    # closes help dialogue (used by button and x at top of dialogue)
+    # write history to text file
+    def write_to_file(self):
+        # retrieve date, filename and calculation history...
+        filename = self.var_filename.get()
+        generated_date = self.var_todays_date.get()
+
+        # set up strings to be written to file
+        heading = "**** Temperature Calculations ****\n"
+        generated = "Generated: {}\n".format(generated_date)
+        sub_heading = "Here is your calculation history " \
+                      "(oldest to newest)...\n"
+        all_calculations = self.var_calc_list.get()
+
+        to_output_list = [heading, generated,
+                          sub_heading, all_calculations]
+
+        # write to file
+        # write output to file
+        text_file = open(filename, "w+")
+
+        for item in to_output_list:
+            text_file.write(item)
+            text_file.write("\n")
+
+        # close file
+        text_file.close()
+
+    # closes history dialogue (used by button and x at top of dialogue)
     def close_history(self, partner):
         # Put help button back to normal...
         partner.to_history_button.config(state=NORMAL)
